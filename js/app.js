@@ -8,15 +8,33 @@ var Cart = function(items) {
 
 Cart.prototype.addItem = function(product, quantity) {
   // TODO: Fill in this instance method to create a new CartItem and add it to this.items
+  var newItem = CartItem(product, quantity);
+  this.items.push(newItem);
 };
 
 Cart.prototype.saveToLocalStorage = function() {
   // TODO: Fill in this instance method to save the contents of the cart to localStorage
+  var setItems = localStorage.getItem('cart')
+  if(setItems){
+    Products.allProducts = JSON.parse(setItems);
+
+  } else {
+
+    generateCatalog();
+    localStorage.setItem('cart', JSON.stringify(Item.allItems));
+
+  }
 };
 
 Cart.prototype.removeItem = function(item) {
   // TODO: Fill in this instance method to remove one item from the cart.
-  // Note: You will have to decide what kind of parameter to pass in here!
+  // Note: You will have to decide what kind of parameter to pass in here.
+  for (var i = 0; i < Cart.items.length; i++) {
+    if (event.target.Cart.items === Cart.items[i]) {
+      Cart.items.splice(Cart.items.indexOf(i), 1);
+      break;
+    }
+  }
 };
 
 var CartItem = function(product, quantity) {
@@ -31,6 +49,16 @@ var Product = function(filePath, name) {
   Product.allProducts.push(this);
 };
 Product.allProducts = [];
+
+function displayProducts () {
+  var select = document.getElementById('items')
+  for (var i = 0; i < Product.allProducts.length; i++) {
+    var product = document.createTextNode(Product.allProducts[i].name);
+    var option = document.createElement('option');
+    option.appendChild(product);
+    select.appendChild(option);
+  }
+}
 
 function generateCatalog() {
   new Product('assets/bag.jpg', 'Bag');
@@ -57,3 +85,4 @@ function generateCatalog() {
 
 // Initialize the app by creating the big list of products with images and names
 generateCatalog();
+displayProducts();
